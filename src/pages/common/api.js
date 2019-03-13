@@ -35,6 +35,10 @@ const  generateSheetForScoreListCJ = (systembId) => {
 const  getEntryrecordList = (data) => {
    return  axiosfn('entryrecord/getEntryrecordList',data)
 }
+//进场记录导出
+const  generateSheetForEntryrecordList = (data) => {
+   return  axiosfn('entryrecord/generateSheetForEntryrecordList',data,'POST')
+}
 //成绩汇总
 const  getScoreManagementListByUserId = (data) => {
    return  axiosfn('scoreManagement/getScoreManagementListByUserId',data)
@@ -65,4 +69,4 @@ const  getResultRecordListByUserId = (data) => {
 const  generateSheetForResultByUserId = (data) => {
    return  axiosfn('/resultRecord/generateSheetForResultByUserId',data)
 }
-export {getResultRecordListByUserId,generateSheetForResultByUserId,generateSheetForResultList,getResultRecordList,getProjectModuleList,getCustomUserById,getScoreManagementListByUserId,generateSheetForScoreByUserId,generateSheetForScoreListCJ, getEntryrecordList,getScoreManagementList,getCustomUserList,userLogin,getBoxtaskInfoIdList,getSysCourseList}
+export {generateSheetForEntryrecordList,getResultRecordListByUserId,generateSheetForResultByUserId,generateSheetForResultList,getResultRecordList,getProjectModuleList,getCustomUserById,getScoreManagementListByUserId,generateSheetForScoreByUserId,generateSheetForScoreListCJ, getEntryrecordList,getScoreManagementList,getCustomUserList,userLogin,getBoxtaskInfoIdList,getSysCourseList}

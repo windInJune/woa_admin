@@ -254,3 +254,48 @@ a {
   width: 0;
   background-color: #999;
 }
+
+.triangle_border_down{
+  width:0;
+  height:0;
+  margin-left: 6px;
+  margin-top: -12px;
+  display: inline-block;
+  border-width:8px  8px 0;
+  transform: rotate(-45deg);
+  border-style:solid;
+  border-color:transparent transparent transparent #fff;/*透明 透明 透明 灰*/
+  position:relative;
+}
+.triangle_border_down span{
+  display:block;
+  width:0;
+  height:0;
+  border-width:28px 28px 0;
+  border-style:solid;
+  border-color:#fc0 transparent transparent;/*黄 透明 透明 */
+  position:absolute;
+  top:0px;
+  left:0px;
+}
+.triangle_border_right{
+  margin-left: 6px;
+  width:0;
+  height:0;
+  display: inline-block;
+  border-width:6px 0 6px 6px;
+  border-style:solid;
+  border-color:transparent transparent transparent #000;/*透明 透明 透明 灰*/
+  position:relative;
+}
+.triangle_border_right span{
+  display:block;
+  width:0;
+  height:0;
+  border-width:28px 0 28px 28px;
+  border-style:solid;
+  border-color:transparent transparent transparent #fc0;/*透明 透明 透明 黄*/
+  position:absolute;
+  top:0px;
+  left:0px;
+}

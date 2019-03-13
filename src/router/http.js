@@ -9,7 +9,13 @@ import {
   setCookie,
   getCookie
 } from "../assets/js/cookie.js";
-const baseUrl = 'http://172.16.1.207:8005/'
+let baseUrl
+if (process.env.NODE_ENV == 'development') {
+    baseUrl = 'http://172.16.1.165/ibox/';
+} else {
+    baseUrl = 'http://172.16.1.165/ibox/';
+    // baseUrl = 'http://47.110.226.59/ibox/'; //线上url
+}
 const axiosfn = (url = '', data = {}, type = 'GET') => {
   console.log()
   type = type.toUpperCase();

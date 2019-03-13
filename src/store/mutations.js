@@ -7,11 +7,11 @@ export default {
     },
     [USERNAME](state, username) {
         state.username = username;
-        sessionStorage.setItem('username',username)
+        sessionStorage.setItem('usernameWah',username)
     },
     [USERIMG](state, userimg) {
         state.userimg = userimg;
-        sessionStorage.setItem('userimg',userimg)
+        sessionStorage.setItem('userimgWah',userimg)
 
     }
 }

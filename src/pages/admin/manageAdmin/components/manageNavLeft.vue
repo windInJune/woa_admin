@@ -32,9 +32,9 @@
               <span slot="title">进场记录</span>
             </el-menu-item>
           </router-link>
-          <el-menu-item index="1" class="list" @click="showScroeFn">
+          <el-menu-item index="1" class="list scalDown" @click="showScroeFn">
             <!-- <i class="el-icon-setting"></i> -->
-            <span slot="title">成绩管理</span>
+            <div slot="title">成绩管理 <div :class="[$route.path.indexOf('achievement') == -1?'triangle_border_right':'triangle_border_down']"></div></div>
           </el-menu-item>
           <div v-show="showScroe" class="scroeBox">
             <el-menu :default-active="routerPathTwo" class="el-menu-vertical-demo">
@@ -130,8 +130,8 @@ export default {
     }
   },
   created() {
-    this.userName = localStorage.getItem("userName");
-    this.sex = localStorage.getItem("sex");
+    this.userName = localStorage.getItem("userNameWah");
+    this.sex = localStorage.getItem("sexWah");
   }
 };
 </script>
@@ -186,7 +186,9 @@ export default {
     background: #0090ff;
   }
   .scroeBox {
-   
+    li{
+      font-size: 12px;
+    }
     .el-menu-item.is-active {
        color: #0090ff;
          background: #e4f5ff; 
@@ -203,6 +205,11 @@ export default {
   .el-menu-item {
     height: 50px;
     line-height: 50px;
+  }
+  .scalDown{
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>

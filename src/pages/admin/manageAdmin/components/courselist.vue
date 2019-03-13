@@ -210,7 +210,7 @@
         <el-form-item label="课程封面：" prop="photo" class="photo">
           <el-upload
             class="avatar-uploader"
-            action="http://172.16.1.207:8005/sysCourse/insertSysCourse"
+            action="http://172.16.1.165/ibox/sysCourse/insertSysCourse"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             accept="image/png, image/jpeg, image/jpg"
@@ -392,7 +392,7 @@
             <span class="must">*</span>
             <el-upload
               class="upload-demo"
-              action="http://172.16.1.207:8005/sysCourse/insertSysCourse"
+              action="http://172.16.1.165/ibox/sysCourse/insertSysCourse"
               :on-remove="handleRemoveOne"
               :before-upload="beforeAvatarUpload2"
               :limit="1"
@@ -408,7 +408,7 @@
             <span class="must">*</span>
             <el-upload
               class="upload-demo"
-              action="http://172.16.1.207:8005/sysCourse/insertSysCourse"
+              action="http://172.16.1.165/ibox/sysCourse/insertSysCourse"
               :on-remove="handleRemoveTwo"
               :before-upload="beforeAvatarUpload3"
               :limit="1"
@@ -423,7 +423,7 @@
             <span class="must">*</span>
             <el-upload
               class="avatar-uploader"
-              action="http://172.16.1.207:8005/sysCourse/insertSysCourse"
+              action="http://172.16.1.165/ibox/sysCourse/insertSysCourse"
               :show-file-list="false"
               :on-success="handleAvatarSuccess"
               accept="image/png, image/jpeg, image/jpg"

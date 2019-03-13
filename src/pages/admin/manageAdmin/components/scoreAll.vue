@@ -148,7 +148,7 @@ export default {
       };
       if (this.tagind < 3) {
         let newobj = {
-          systembId: localStorage.getItem("systembId"),
+          systembId: localStorage.getItem("systembIdWah"),
           moduleType: this.tagind
         };
         let tag = Object.assign(obj, newobj, this.pageObj);
@@ -190,11 +190,9 @@ export default {
         };
         generateSheetForResultByUserId(obj).then(res => {
           if (res.status == 200) {
-            window.open(res.data.resultObject);
-            this.$message({
-              type: "success",
-              message: "导出成功"
-            });
+             if(res.status == 200){
+               window.open(res.data.resultObject);
+             }
           }
         });
       } else {

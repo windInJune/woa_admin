@@ -52,12 +52,12 @@ export default {
     quit() {
       delCookie("userToken");
       this.$router.push("/");
-      localStorage.removeItem("userName");
-      localStorage.removeItem("sex");
+      localStorage.removeItem("userNameWah");
+      localStorage.removeItem("sexWah");
     }
   },
   created() {
-    this.userName = localStorage.getItem("userName");
+    this.userName = localStorage.getItem("userNameWah");
   }
 };
 </script>

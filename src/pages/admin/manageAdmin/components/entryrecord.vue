@@ -3,7 +3,7 @@
     <!-- 表单信息 -->
     <ul class="title-icon">
       <li style="font-size: 14px;
-    color: #434343;">学员列表
+    color: #434343;">学员进场列表
         <!-- <i class="el-icon-caret-right"></i> -->
       </li>
     </ul>
@@ -33,6 +33,9 @@
       </li>
       <li>
         <div class="searchs_btn" @click="searchSubmit">查找</div>
+      </li>
+        <li>
+        <div class="searchs_btn" @click="outer">导出</div>
       </li>
     </ul>
     <el-table
@@ -68,7 +71,7 @@
 /*eslint-disable */
 import Vue from "vue";
 import { setCookie, getCookie } from "../../../../assets/js/cookie.js";
-import { getEntryrecordList} from "../../../common/api.js";
+import { getEntryrecordList,generateSheetForEntryrecordList} from "../../../common/api.js";
 export default {
   name: "AdminList",
   data() {
@@ -100,7 +103,7 @@ export default {
     loadData() {
       this.loading = true;
       let _data = {
-        systembId:localStorage.getItem("systembId"),
+        systembId:localStorage.getItem("systembIdWah"),
         classId: this.classValue, //班级编号
         searchName: this.serarchValue, //学员姓名
         pageNum: this.currentPage,
@@ -127,6 +130,21 @@ export default {
           this.schoolList = res.data.resultObject.data;
         }
       });
+    },
+    outer(){
+       generateSheetForEntryrecordList({
+          systembId:localStorage.getItem("systembIdWah"),
+          classId: this.classValue, //班级编号
+          searchName: this.serarchValue, //学员姓名
+          pageNum: this.currentPage,
+          pageSize: this.pageSize,
+          schoolId:this.schoolValue,
+          gradeId:this.GradeValue
+        }).then(res => {
+           if(res.status == 200){
+            window.open(res.data.resultObject);
+          }
+        })
     },
     schoolChange() {
       console.log(this.schoolValue);

@@ -8,14 +8,30 @@
         <i class="el-icon-caret-right"></i>答题软件
       </li>
     </ul>
-      <ul class="navlist">
+    <div class="navBox">
+      <div class="scrollLeft" @click="navListScrollLeft">
+        <div class="leftfont"></div>
+      </div>
+      <ul class="navlist" ref="navlist">
+        <li
+          v-for="(item,index) in projectModuleList"
+          :class="[item.id == projectModuleid?'active':'']"
+          :key="index"
+          @click="choseSystem(item.id)"
+        >{{item.name}}</li>
+      </ul>
+      <div class="scrollRight" @click="navListScrollRight">
+        <div class="rightfont"></div>
+      </div>
+    </div>
+    <!-- <ul class="navlist">
       <li
         v-for="(item,index) in projectModuleList"
         :class="[item.id == projectModuleid?'active':'']"
         :key="index"
         @click="choseSystem(item.id)"
       >{{item.name}}</li>
-    </ul>
+    </ul>-->
     <ul class="search">
       <li>
         <el-select v-model="schoolValue" placeholder="全部机构" @change="schoolChange">
@@ -37,7 +53,7 @@
           <el-option v-for="item in classList" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </li>
-     <!-- <li>
+      <!-- <li>
         <el-select v-model="kcValue" placeholder="全部课程" @change="kcChange">
           <el-option v-for="item in kc" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
@@ -46,7 +62,7 @@
         <el-select v-model="rwValue" placeholder="全部任务" @change="rwChange">
           <el-option v-for="item in rw" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
-      </li> -->
+      </li>-->
       <li>
         <el-input v-model="serarchValue" placeholder="请输入知号、姓名、学号查询" class="serarchValue"></el-input>
       </li>
@@ -71,7 +87,11 @@
       <el-table-column prop="className" label="班级"></el-table-column>
       <el-table-column prop="resultScore" label=" 成绩"></el-table-column>
       <el-table-column prop="resultLevel" label="层级"></el-table-column>
-      <el-table-column prop="timeCost" label="考试用时"></el-table-column>
+      <el-table-column prop="timeCost" label="考试用时">
+        <template slot-scope="scope">
+              <span>{{scope.row.timeCost | settimems}}</span>
+            </template>
+      </el-table-column>
       <el-table-column prop="schoolName" label="考试地点"></el-table-column>
       <el-table-column prop="endTime" label="完成时间"></el-table-column>
       <el-table-column prop="subjectType" label="操作" width="310">
@@ -80,9 +100,7 @@
             size="small"
             @click="detail(scope.$index, scope.row)"
             class="iconfont-color-blue"
-          >
-           考评汇总
-          </el-button>
+          >考评汇总</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -100,7 +118,15 @@
 /*eslint-disable */
 import Vue from "vue";
 import { setCookie, getCookie } from "../../../../assets/js/cookie.js";
-import { generateSheetForResultList,getResultRecordList,getProjectModuleList,generateSheetForScoreListCJ,getBoxtaskInfoIdList,getSysCourseList,getScoreManagementList} from "../../../common/api.js";
+import {
+  generateSheetForResultList,
+  getResultRecordList,
+  getProjectModuleList,
+  generateSheetForScoreListCJ,
+  getBoxtaskInfoIdList,
+  getSysCourseList,
+  getScoreManagementList
+} from "../../../common/api.js";
 export default {
   name: "AdminList",
   data() {
@@ -127,12 +153,18 @@ export default {
         { name: "全部账号状态", id: -1 }
       ],
       statusValue: "",
-      projectModuleid:null,
+      projectModuleid: null,
       statusDetail: "",
-      projectModuleList:[]
+      projectModuleList: []
     };
   },
   methods: {
+     navListScrollLeft(){
+      this.$refs.navlist.scrollLeft <= 0?this.$refs.navlist.scrollLeft == 0 : this.$refs.navlist.scrollLeft = this.$refs.navlist.scrollLeft - 100
+    },
+    navListScrollRight(){
+      this.$refs.navlist.scrollLeft = this.$refs.navlist.scrollLeft + 100
+    },
     headerClassFn(row, column, rowIndex, columnIndex) {
       return "color:#434343;background:rgba(245,245,245,1);font-size:12px;";
     },
@@ -145,27 +177,27 @@ export default {
     loadData() {
       this.loading = true;
       let _data = {
-        systembId:localStorage.getItem("systembId"),
+        systembId: localStorage.getItem("systembIdWah"),
         classId: this.classValue, //班级编号
         gradeId: this.GradeValue, //当前用户id
         schoolId: this.schoolValue,
         searchText: this.serarchValue, //学员姓名
-        moduleId:this.projectModuleid,
+        moduleId: this.projectModuleid,
         pageNum: this.currentPage,
         pageSize: this.pageSize
       };
       getResultRecordList(_data).then(res => {
-          this.total = res.data.resultObject.totalCount;
-          this.pageData = res.data.resultObject.data;
-          this.loading = false;
+        this.total = res.data.resultObject.totalCount;
+        this.pageData = res.data.resultObject.data;
+        this.loading = false;
       });
     },
     // 详情
     detail(index, row) {
-        this.$router.push({
-          path: '/manageAdmin/scoreAll',
-          query:{userId: row.userId,moduleType:1}
-        })
+      this.$router.push({
+        path: "/manageAdmin/scoreAll",
+        query: { userId: row.userId, moduleType: 1 }
+      });
     },
     // 修改状态
     changeState(index, row, n) {
@@ -212,15 +244,15 @@ export default {
         }
       });
     },
-    getBoxtaskInfoIdListFn(){
-      getBoxtaskInfoIdList(localStorage.getItem("systembId")).then(res => {
-         console.log(res)
-      })
+    getBoxtaskInfoIdListFn() {
+      getBoxtaskInfoIdList(localStorage.getItem("systembIdWah")).then(res => {
+        console.log(res);
+      });
     },
-    getSysCourseListFn(){
-      getSysCourseList(localStorage.getItem("systembId")).then(res => {
-        this.kc = res.data.resultObject.data
-      })
+    getSysCourseListFn() {
+      getSysCourseList(localStorage.getItem("systembIdWah")).then(res => {
+        this.kc = res.data.resultObject.data;
+      });
     },
     schoolChange() {
       console.log(this.schoolValue);
@@ -264,28 +296,30 @@ export default {
     searchSubmit() {
       this.loadData();
     },
-    outer(){
+    outer() {
       generateSheetForResultList({
-        moduleId:this.projectModuleid,
-        moduleType:1
+        moduleId: this.projectModuleid,
+        moduleType: 1
       }).then(res => {
-        window.open(res.data.resultObject)
-      })
+        if(res.status == 200){
+           window.open(res.data.resultObject);
+        }
+      });
     },
-    choseSystem(id){
+    choseSystem(id) {
       this.projectModuleid = id;
-      this.loadData()
+      this.loadData();
     }
   },
   created() {
     this.getSchools();
-    this.getBoxtaskInfoIdListFn()
-    this.getSysCourseListFn()
+    this.getBoxtaskInfoIdListFn();
+    this.getSysCourseListFn();
     getProjectModuleList(1).then(res => {
       this.projectModuleList = res.data.resultObject;
       this.projectModuleid = res.data.resultObject[0].id;
-      this.loadData()
-    })    
+      this.loadData();
+    });
   }
 };
 </script>
@@ -318,7 +352,7 @@ export default {
       width: 110px;
     }
   }
-  .lastLi{
+  .lastLi {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -340,31 +374,76 @@ export default {
       text-indent: 20px;
     }
   }
-  .navlist {
-    height: 50px;
-    width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    text-align: left;
-    white-space: nowrap;
-    margin-bottom: 30px;
-    -moz-box-sizing: border-box;
-    margin-top:30px;
-    border: 1px solid #e5e5e4;
-    li {
+  .navBox {
+    margin-top: 20px;
+    position: relative;
+    .scrollLeft {
+      position: absolute;
       height: 100%;
-      line-height: 50px;
-      display: inline-block;
-      font-size: 14px;
-      padding: 0 30px;
+      left: 0;
+      top: 0;
+      width: 28px;
       cursor: pointer;
-      border-right: 1px solid #e5e5e4;
-      &.active {
-        color: #fff;
-        background: #0090ff;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      background: rgba(238, 238, 238, 1);
+      .leftfont {
+        width: 18px;
+        height: 16px;
+        margin-left: 8px;
+        background: url("../../../../assets/images/left.png") no-repeat center;
+      }
+    }
+    .scrollRight {
+      position: absolute;
+      height: 100%;
+      right: 0;
+      top: 0;
+      width: 28px;
+      cursor: pointer;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      background: rgba(238, 238, 238, 1);
+      .rightfont {
+        width: 18px;
+        height: 16px;
+        background: url("../../../../assets/images/right.png") no-repeat center;
+      }
+    }
+    .navlist {
+      width: 100%;
+      padding: 12px 30px 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+      text-align: left;
+      white-space: nowrap;
+      margin-bottom: 30px;
+      -moz-box-sizing: border-box;
+      background: rgba(245, 245, 245, 1);
+      border: 1px solid rgba(229, 229, 228, 1);
+      position: relative;
+      box-sizing: border-box;
+      li {
+        background: rgba(255, 255, 255, 1);
+        border: 1px solid rgba(201, 201, 201, 1);
+        border-radius: 10px;
+        display: inline-block;
+        font-size: 14px;
+        margin-left: 5px;
+        padding: 10px 20px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        &.active {
+          color: #fff;
+          background: #0090ff;
+          border: 0;
+        }
       }
     }
   }
+
   .wrongTips {
     display: inline-block;
     text-align: left;

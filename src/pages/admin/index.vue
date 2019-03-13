@@ -63,11 +63,17 @@ export default {
         .then(
           res => {
             if (res.data.status === 200) {
+              if(res.data.resultObject.systembId != 2){
+                   this.$message({
+                      showClose: true,
+                      message: '不是此平台管理员',
+                      type: 'warning'
+                    });
+                 return;
+              }
               this.USERINFO(res.data.resultObject);
               this.USERNAME(res.data.resultObject.userName);
-              this.USERIMG(
-                "http://172.16.1.207:8005/" + res.data.resultObject.userPhoto
-              );
+              this.USERIMG(res.data.resultObject.userPhoto);
               setCookie(
                 "userToken",
                 res.data.resultObject.userToken,
@@ -76,15 +82,15 @@ export default {
               this.userToken = res.data.resultObject.userToken;
               this.userName = res.data.resultObject.userName;
               this.sex = res.data.resultObject.userSex;
-              localStorage.setItem("userName", res.data.resultObject.userName);
+              localStorage.setItem("userNameWah", res.data.resultObject.userName);
               localStorage.setItem(
                 "systemName",
                 res.data.resultObject.userLoginname
               );
-              localStorage.setItem("userId", res.data.resultObject.userId);
-              localStorage.setItem("systembId", res.data.resultObject.systembId);
-              localStorage.setItem("sex", this.sex);
-              localStorage.setItem("userType", res.data.resultObject.userType);
+              localStorage.setItem("userIdWah", res.data.resultObject.userId);
+              localStorage.setItem("systembIdWah", res.data.resultObject.systembId);
+              localStorage.setItem("sexWah", this.sex);
+              localStorage.setItem("userTypeWah", res.data.resultObject.userType);
               if (res.data.resultObject.userType == "2") {
                 this.$router.push({
                   path: "/manageAdmin",

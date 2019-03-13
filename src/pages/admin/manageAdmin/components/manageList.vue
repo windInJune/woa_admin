@@ -39,10 +39,7 @@
       <el-table-column prop="managerName" label="负责人"></el-table-column>
       <el-table-column prop="zhiNumber" label="知号"></el-table-column>
       <el-table-column prop="managerTel" label="联系电话" width="120"></el-table-column>
-      <el-table-column prop="createTime" label="创建时间" width="130">
-        <template slot-scope="scope">
-          <span class="creatTime">{{scope.row.createTime}}</span>
-        </template>
+      <el-table-column prop="createTime" label="创建时间" width="140">
       </el-table-column>
       <el-table-column prop="createUsername" label="创建人"></el-table-column>
       <el-table-column prop="isDisable" label="状态">
@@ -333,7 +330,7 @@ export default {
       this.$http
         .get(
           this.global.getSchoolList +
-            `?systembId=${localStorage.getItem("systembId")}&userType=2&pageNum=${this.currentPage}&pageSize=${this.pageSize}`
+            `?systembId=${localStorage.getItem("systembIdWah")}&userType=2&pageNum=${this.currentPage}&pageSize=${this.pageSize}`
         )
         .then(res => {
           if (res.data.status === 200) {
@@ -492,7 +489,7 @@ export default {
               schoolMark: this.schoolMark,
               managerName: this.managerName,
               managerTel: this.managerTel,
-              systembId: localStorage.getItem("systembId")
+              systembId: localStorage.getItem("systembIdWah")
             },
             { emulateJSON: true }
           )

@@ -8,14 +8,30 @@
         <i class="el-icon-caret-right"></i>抢答软件
       </li>
     </ul>
-      <ul class="navlist">
+     <div class="navBox">
+      <div class="scrollLeft" @click="navListScrollLeft">
+        <div class="leftfont"></div>
+      </div>
+      <ul class="navlist" ref="navlist">
+        <li
+          v-for="(item,index) in projectModuleList"
+          :class="[item.id == projectModuleid?'active':'']"
+          :key="index"
+          @click="choseSystem(item.id)"
+        >{{item.name}}</li>
+      </ul>
+      <div class="scrollRight" @click="navListScrollRight">
+        <div class="rightfont"></div>
+      </div>
+    </div>
+      <!-- <ul class="navlist">
       <li
         v-for="(item,index) in projectModuleList"
         :class="[item.id == projectModuleid?'active':'']"
         :key="index"
         @click="choseSystem(item.id)"
       >{{item.name}}</li>
-    </ul>
+    </ul> -->
     <ul class="search">
       <li>
         <el-select v-model="schoolValue" placeholder="全部机构" @change="schoolChange">
@@ -71,7 +87,11 @@
       <el-table-column prop="className" label="班级"></el-table-column>
       <el-table-column prop="resultScore" label=" 成绩"></el-table-column>
       <el-table-column prop="resultLevel" label="层级"></el-table-column>
-      <el-table-column prop="timeCost" label="考试用时"></el-table-column>
+      <el-table-column prop="timeCost" label="考试用时">
+         <template slot-scope="scope">
+              <span>{{scope.row.timeCost | settimems}}</span>
+            </template>
+      </el-table-column>
       <el-table-column prop="schoolName" label="考试地点"></el-table-column>
       <el-table-column prop="endTime" label="完成时间"></el-table-column>
       <el-table-column prop="subjectType" label="操作" width="310">
@@ -133,6 +153,12 @@ export default {
     };
   },
   methods: {
+     navListScrollLeft(){
+      this.$refs.navlist.scrollLeft <= 0?this.$refs.navlist.scrollLeft == 0 : this.$refs.navlist.scrollLeft = this.$refs.navlist.scrollLeft - 100
+    },
+    navListScrollRight(){
+      this.$refs.navlist.scrollLeft = this.$refs.navlist.scrollLeft + 100
+    },
     headerClassFn(row, column, rowIndex, columnIndex) {
       return "color:#434343;background:rgba(245,245,245,1);font-size:12px;";
     },
@@ -145,7 +171,7 @@ export default {
     loadData() {
       this.loading = true;
       let _data = {
-        systembId:localStorage.getItem("systembId"),
+        systembId:localStorage.getItem("systembIdWah"),
         classId: this.classValue, //班级编号
         gradeId: this.GradeValue, //当前用户id
         schoolId: this.schoolValue,
@@ -213,12 +239,12 @@ export default {
       });
     },
     getBoxtaskInfoIdListFn(){
-      getBoxtaskInfoIdList(localStorage.getItem("systembId")).then(res => {
+      getBoxtaskInfoIdList(localStorage.getItem("systembIdWah")).then(res => {
          console.log(res)
       })
     },
     getSysCourseListFn(){
-      getSysCourseList(localStorage.getItem("systembId")).then(res => {
+      getSysCourseList(localStorage.getItem("systembIdWah")).then(res => {
         this.kc = res.data.resultObject.data
       })
     },
@@ -269,7 +295,9 @@ export default {
         moduleId:this.projectModuleid,
         moduleType:2
       }).then(res => {
-        window.open(res.data.resultObject)
+        if(res.status == 200){
+           window.open(res.data.resultObject);
+        }
       })
     },
     choseSystem(id){
@@ -340,28 +368,73 @@ export default {
       text-indent: 20px;
     }
   }
-  .navlist {
-    height: 50px;
-    width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    text-align: left;
-    white-space: nowrap;
-    margin-bottom: 30px;
-    -moz-box-sizing: border-box;
-    margin-top:30px;
-    border: 1px solid #e5e5e4;
-    li {
+    .navBox {
+    margin-top: 20px;
+
+    position: relative;
+    .scrollLeft {
+      position: absolute;
       height: 100%;
-      line-height: 50px;
-      display: inline-block;
-      font-size: 14px;
-      padding: 0 30px;
+      left: 0;
+      top: 0;
+      width: 28px;
       cursor: pointer;
-      border-right: 1px solid #e5e5e4;
-      &.active {
-        color: #fff;
-        background: #0090ff;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      background: rgba(238, 238, 238, 1);
+      .leftfont {
+        width: 18px;
+        height: 16px;
+        margin-left: 8px;
+        background: url("../../../../assets/images/left.png") no-repeat center;
+      }
+    }
+    .scrollRight {
+      position: absolute;
+      height: 100%;
+      right: 0;
+      top: 0;
+      width: 28px;
+      cursor: pointer;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      background: rgba(238, 238, 238, 1);
+      .rightfont {
+        width: 18px;
+        height: 16px;
+        background: url("../../../../assets/images/right.png") no-repeat center;
+      }
+    }
+    .navlist {
+      width: 100%;
+      padding: 12px 30px 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+      text-align: left;
+      white-space: nowrap;
+      margin-bottom: 30px;
+      -moz-box-sizing: border-box;
+      background: rgba(245, 245, 245, 1);
+      border: 1px solid rgba(229, 229, 228, 1);
+      position: relative;
+      box-sizing: border-box;
+      li {
+        background: rgba(255, 255, 255, 1);
+        border: 1px solid rgba(201, 201, 201, 1);
+        border-radius: 10px;
+        display: inline-block;
+        font-size: 14px;
+        margin-left: 5px;
+        padding: 10px 20px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        &.active {
+          color: #fff;
+          background: #0090ff;
+          border: 0;
+        }
       }
     }
   }
