@@ -2,9 +2,9 @@
 let localAPI;
 // 登录
 if (process.env.NODE_ENV == 'development') {
-    localAPI = 'http://172.16.1.165/ibox';
+    localAPI = 'http://47.110.226.59/ibox';
 } else {
-    localAPI = 'http://172.16.1.165/ibox';
+    localAPI = 'http://47.110.226.59/ibox';
     // localAPI = 'http://47.110.226.59/ibox'; //线上url
 }
 // 登录
@@ -38,6 +38,10 @@ const deleteIboxById = localAPI + '/iboxInfo/deleteIboxById'
 const insertIbox = localAPI + '/iboxInfo/insertIbox'
 const editIbox = localAPI + '/iboxInfo/editIbox'
 const getSearchTexts = localAPI + '/iboxInfo/getSearchTexts'
+const getSystembById = localAPI + '/systermb/getSystembById'
+const getSystembs = localAPI + '/systermb/getSystembs'
+const getUserRecord = localAPI + '/iboxInfo/getUserRecord'
+
 // 课程管理
 const getSysCourseList = localAPI + '/sysCourse/getSysCourseList'
 const getSectionList = localAPI + '/sectionProfession/getSectionList'
@@ -54,9 +58,24 @@ const insertBoxtask = localAPI + '/boxtask/insertBoxtask'
 const getBoxtaskById = localAPI + '/boxtask/getBoxtaskById'
 const deleteBoxtask = localAPI + '/boxtask/deleteBoxtask'
 const updateBoxtask = localAPI + '/boxtask/updateBoxtask'
-
+const modifyUserPwdByOldPwd = localAPI + '/user/modifyUserPwdByOldPwd'
+const getSchoolsDrowDown = localAPI + '/school/getSchoolsDrowDown'
+ //获取设备设置状态
+const getIboxSettingInfo = localAPI + '/iboxInfo/getIboxSettingInfo'
+ //设置设备状态
+const updateIboxSettingInfo = localAPI + '/iboxInfo/updateIboxSettingInfo'
+//查看回放记录
+const getVideo = localAPI + '/httpClient/getVideo'
 export default
 {
+  getUserRecord,
+  getIboxSettingInfo,
+updateIboxSettingInfo,
+getVideo,
+  getSchoolsDrowDown,
+  getSystembById,
+  getSystembs,
+  modifyUserPwdByOldPwd,
   editSystemUser,
   localAPI,
   userlogin,

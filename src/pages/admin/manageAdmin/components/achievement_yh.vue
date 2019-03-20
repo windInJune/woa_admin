@@ -8,7 +8,7 @@
         <i class="el-icon-caret-right"></i>隐患排查
       </li>
     </ul>
-      <div class="navBox">
+    <!-- <div class="navBox">
       <div class="scrollLeft" @click="navListScrollLeft">
         <div class="leftfont"></div>
       </div>
@@ -23,7 +23,7 @@
       <div class="scrollRight" @click="navListScrollRight">
         <div class="rightfont"></div>
       </div>
-    </div>
+    </div> -->
       <!-- <ul class="navlist">
       <li
         v-for="(item,index) in projectModuleList"
@@ -33,6 +33,16 @@
       >{{item.name}}</li>
     </ul> -->
     <ul class="search">
+      <li>
+        <el-select v-model="projectModuleid" placeholder="工程名称" @change="projectChange">
+          <el-option
+            v-for="item in projectModuleList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+      </li>
       <li>
         <el-select v-model="schoolValue" placeholder="全部机构" @change="schoolChange">
           <el-option
@@ -44,12 +54,12 @@
         </el-select>
       </li>
       <li>
-        <el-select v-model="GradeValue" placeholder="全部年级" @change="GradeChange">
+        <el-select v-model="GradeValue" placeholder="全部项目部" @change="GradeChange">
           <el-option v-for="item in GradeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </li>
       <li>
-        <el-select v-model="classValue" placeholder="全部班级" @change="classChange">
+        <el-select v-model="classValue" placeholder="全部班组" @change="classChange">
           <el-option v-for="item in classList" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </li>
@@ -83,8 +93,8 @@
       </el-table-column>
       <el-table-column prop="userName" label="姓名" width="100"></el-table-column>
       <el-table-column prop="schoolName" label="所属机构"></el-table-column>
-      <el-table-column prop="gradeName" label="年级"></el-table-column>
-      <el-table-column prop="className" label="班级"></el-table-column>
+      <el-table-column prop="gradeName" label="项目部"></el-table-column>
+      <el-table-column prop="className" label="班组"></el-table-column>
       <el-table-column prop="resultScore" label=" 成绩"></el-table-column>
       <el-table-column prop="resultLevel" label="层级"></el-table-column>
       <el-table-column prop="timeCost" label="考试用时">
@@ -94,7 +104,7 @@
       </el-table-column>
       <el-table-column prop="schoolName" label="考试地点"></el-table-column>
       <el-table-column prop="endTime" label="完成时间"></el-table-column>
-      <el-table-column prop="subjectType" label="操作" width="310">
+      <el-table-column prop="subjectType" label="操作" width="160">
         <template slot-scope="scope" class="handle">
           <el-button
             size="small"
@@ -247,6 +257,9 @@ export default {
       getSysCourseList(localStorage.getItem("systembIdWah")).then(res => {
         this.kc = res.data.resultObject.data
       })
+    },
+    projectChange() {
+      this.loadData();
     },
     schoolChange() {
       console.log(this.schoolValue);

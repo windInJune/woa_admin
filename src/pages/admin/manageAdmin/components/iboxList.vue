@@ -42,6 +42,16 @@
           <el-option v-for="(item,index) in arearrs" :key="index" :label="item" :value="index"></el-option>
         </el-select>
       </li>
+      <!-- <li>
+        <el-select v-model="platform" @change="selectChange" placeholder="请选择管理平台">
+          <el-option
+            v-for="(item,index) in platformlist"
+            :key="index"
+            :label="item.systembName"
+            :value="item.systembId"
+          ></el-option>
+        </el-select>
+      </li> -->
       <li>
         <el-select v-model="schoolValue" placeholder="全部机构" @change="schoolChange">
           <el-option
@@ -74,13 +84,14 @@
       <span>{{this.IBOXStatus[4]}}</span> 台，其中空闲
       <span class="green">{{this.IBOXStatus[0]}}</span>台，忙碌
       <span class="yellow">{{this.IBOXStatus[1]}}</span>台，离线
-      <span class="red">{{this.IBOXStatus[2]}}</span>台。
+      <span class="red">{{this.IBOXStatus[2]}}</span>台，警报
+      <span style="color:pink">{{this.IBOXStatus[3]}}</span>台。
       <div class="addSb" @click="creatEquip">＋&nbsp;&nbsp;新增设备</div>
       <!-- <el-button type="success"  @click="creatEquip"></el-button> -->
     </div>
     <!-- 表单 -->
     <el-table :data="pageData" highlight-current-row :header-cell-style="headerClassFn"  style="width: 100%;border:1px solid rgba(229, 229, 228, 1)" v-loading="loading">
-      <el-table-column type="index" label="序号" width="80">
+      <el-table-column type="index" label="序号">
         <template slot-scope="scope">{{scope.$index + 1 + (currentPage-1)*10}}</template>
       </el-table-column>
       <el-table-column prop="iboxName" label="名称" width="120"></el-table-column>
@@ -100,6 +111,11 @@
           </el-popover>-->
         </template>
       </el-table-column>
+      <!-- <el-table-column prop="systembName" label="所属大B平台" width="100">
+        <template slot-scope="scope">
+          <p>{{ scope.row.systembName }}</p>
+        </template>
+      </el-table-column> -->
       <el-table-column prop="schoolName" label="所属机构" width="100">
         <template slot-scope="scope">
           <p>{{ scope.row.schoolName }}</p>
@@ -112,9 +128,10 @@
       </el-table-column>
       <el-table-column prop="iboxStatus" label="状态">
         <template slot-scope="scope">
-          <span v-show="scope.row.iboxStatus == 0">空闲</span>
-          <span v-show="scope.row.iboxStatus == 1">忙碌</span>
+          <span v-show="scope.row.iboxStatus == 0" class="green">空闲</span>
+          <span v-show="scope.row.iboxStatus == 1" class="yellow">忙碌</span>
           <span v-show="scope.row.iboxStatus == 2">离线</span>
+          <span v-show="scope.row.iboxStatus == 3" class="red">警报</span>
         </template>
       </el-table-column>
       <el-table-column prop="useringTotalCount" label="使用人次">
@@ -123,7 +140,7 @@
           <span v-show="scope.row.useringTotalCount != ''">{{scope.row.useringTotalCount}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="useringTotalTime" label="累计使用时长" width="120">
+      <el-table-column prop="useringTotalTime" label="累计使用时长" width="100">
         <template slot-scope="scope">
           <span v-show="scope.row.useringTotalTime == ''">--</span>
           <span
@@ -139,7 +156,7 @@
         </template>
       </el-table-column>
       -->
-      <el-table-column prop="latestTime" label="最近使用" width="160">
+      <el-table-column prop="latestTime" label="最近使用" width="100">
         <template slot-scope="scope">
           <span v-show="scope.row.latestTime == ''">--</span>
           <span v-show="scope.row.latestTime != ''">{{scope.row.latestTime | formatDate2}}</span>
@@ -156,23 +173,24 @@
           </el-button>
           <el-button
             size="small"
-            @click="detail2(scope.$index, scope.row)"
             class="iconfont-color-blue"
+            @click="iboxDetailFn(scope.$index, scope.row)"
           >
             <i class="iconfont">&#xe77f;</i>监控
           </el-button>
-          <el-button
-            size="small"
-            @click="detail3(scope.$index, scope.row)"
-            class="iconfont-color-blue"
-          >
-            <i class="iconfont">&#xe608;</i>设置
-          </el-button>
-          <el-button
-            size="small"
-            @click="equipDelete(scope.$index, scope.row)"
-            class="iconfont-color-blue iconfont-color-red"
-          >
+            <el-button
+              size="small"
+              class="iconfont-color-blue"
+               @click="iboxDetailSet(scope.$index, scope.row)"
+
+            >
+              <i class="iconfont">&#xe608;</i>设置
+            </el-button>
+            <el-button
+              size="small"
+              @click="equipDelete(scope.$index, scope.row)"
+              class="iconfont-color-blue iconfont-color-red"
+            >
             <i class="iconfont">&#xe600;</i>删除
           </el-button>
         </template>
@@ -194,7 +212,7 @@
       width="40%"
       class="detail"
     >
-      <el-form status-icon label-width="100px" class="demo-ruleForm" :model="detailData">
+      <el-form status-icon label-width="100px" class="demo-ruleForm" id="alertIbox" :model="detailData">
         <el-form-item label="设备名称" prop="equipName">
           <span class="must">*</span>
           <el-input
@@ -241,8 +259,30 @@
             v-show="this.detailData.equipNumTips"
           >{{this.detailData.equipNumTips}}</span>
         </el-form-item>
+          <el-form-item label="摄像头序列号"  prop="equipNum">
+          <span class="must" style="left:-104px;">*</span>
+          <el-input
+            type="text"
+            v-model.trim="detailData.cameraNum"
+            placeholder="请输入摄像头序列号"
+            :maxlength="10"
+          ></el-input>
+          <span
+            class="wrongTips"
+            v-show="this.detailData.cameraNumTips"
+          >{{this.detailData.cameraNumTips}}</span>
+        </el-form-item>
+        <!-- <el-form-item label="所属大B平台" style="text-align:left">
+          <span class="must" style="left:-100px;">*</span>
+          <el-select v-model="platformold" @change="selectChangeset" placeholder="请选择管理平台">
+            <el-option   v-for="(item,index) in platformlistold"
+                :key="index"
+                :label="item.systembName"
+                :value="item.systembId"></el-option>
+          </el-select>
+        </el-form-item> -->
         <el-form-item label="所属机构" prop="schoolName" class="schoolname">
-          <span class="must">*</span>
+          <span class="must" >*</span>
           <el-select
             v-model.trim="detailData.schoolId"
             filterable
@@ -251,8 +291,8 @@
             @change="schoolNamePattern"
           >
             <el-option
-              v-for="item in schoolList"
-              :key="item.schoolId"
+              v-for="(item,index)  in schoolList1"
+              :key="index"
               :label="item.schoolName"
               :value="item.schoolId"
             ></el-option>
@@ -266,7 +306,8 @@
           <el-input
             type="text"
             v-model.trim="detailData.userName"
-            placeholder="请输入不长于6字负责人姓名"
+            placeholder="请输入不长于6个字负责人姓名"
+            maxlength="6"
             @change="userNamePattern"
           ></el-input>
           <span
@@ -368,6 +409,8 @@ export default {
         versionTitleTips: "",
         equipNum: "",
         equipNumTips: "",
+        cameraNumTips:"",
+        cameraNum:"",
         schoolId: "",
         schoolIdTips: "",
         schoolName: "",
@@ -379,7 +422,9 @@ export default {
       },
       //刷选条件
       schoolList: "",
+      schoolList1:"",
       schoolValue: "",
+      schoolValue1:"",
       serarchValue: "",
       statusValue: "",
       statusList: [
@@ -400,11 +445,41 @@ export default {
       version: [{ id: 1, title: "通用型" }],
       provinceId: "",
       cityId: "",
-      areaId: ""
+      areaId: "",
+      platform: "",
+      palatformId: localStorage.getItem("systembIdWah"),
+      platformlist: [],
+      platformlistold:[],
+      platformold:"",
+      platformoldId:localStorage.getItem("systembIdWah")//编辑里面的平台选择id
     };
   },
   methods: {
-        // 处理页号改变
+    iboxDetailSet(index,row){
+      this.$router.push({
+          path: '/manageAdmin/iboxdetail',
+          query:{iboxId: row.iboxId,isSet:true,iboxNum:row.iboxNum}
+        })
+    },
+    iboxDetailFn(index,row){
+        this.$router.push({
+          path: '/manageAdmin/iboxdetail',
+          query:{iboxId: row.iboxId,iboxNum:row.iboxNum}
+        })
+    },
+     selectChangeset(val){
+      this.platformoldId = val
+      this.schoolValue1 = "";
+      this.detailData.schoolId = "";
+      this.getSchoolsOne()
+    },
+      selectChange(val) {
+      this.palatformId = val;
+      this.schoolValue = "";
+      this.getSchools()
+      this.loadData(val);
+    },
+    // 处理页号改变
     headerClassFn(row, column, rowIndex, columnIndex){
       return "color:#434343;font-size:12px;border-radius:0;"
     },
@@ -422,22 +497,20 @@ export default {
           this.global.getIboxList +
             `?schoolId=${this.schoolValue}&iboxStatus=${
               this.statusValue
-            }&provinceId=${this.provinceId}&cityId=${this.cityId}&areaId=${
+            }&systembId=${this.palatformId}&provinceId=${this.provinceId}&cityId=${this.cityId}&areaId=${
               this.areaId
             }&searchText=${this.searchText}&pageNum=${
               this.currentPage
             }&pageSize=${this.pageSize}`
         )
         .then(res => {
-          console.log(res);
           if (res.data.status === 200) {
             this.pageData = res.data.resultObject.data;
-            // this.currentPage = res.data.resultObject.currentPage;
             this.total = res.data.resultObject.totalCount;
+            // this.currentPage = res.data.resultObject.currentPage;
             // this.pageSize = res.data.resultObject.pageSize;
             // const { items, currentPage } = res.data.resultObject;
             this.IBOXStatus = res.data.resultObject.iboxStatus;
-            console.log(res.data.resultObject.iboxStatus);
           } else if (res.data.status === 511) {
             this.$router.push({ path: "/" });
           } else {
@@ -451,7 +524,6 @@ export default {
       this.$http.get(this.global.getSearchTexts).then(
         res => {
           this.options = res.data.resultObject;
-          console.log(this.options);
         },
         err => {
           console.log(err);
@@ -461,12 +533,17 @@ export default {
     // 重置
     resect() {
       this.detailData.equipName = "";
+      this.platformold = "";
+      this.platformoldId = localStorage.getItem("systembIdWah");
+      // this.schoolList1 = [];
       this.detailData.equipNameTips = "";
       this.detailData.versionID = "";
       this.detailData.versionTitle = "";
       this.detailData.versionTitleTips = "";
       this.detailData.equipNum = "";
+      this.detailData.cameraNum = "";
       this.detailData.equipNumTips = "";
+      this.detailData.cameraNumTips = "";
       this.detailData.schoolId = "";
       this.detailData.schoolIdTips = "";
       this.detailData.schoolName = "";
@@ -479,9 +556,19 @@ export default {
     // 全部学校
     getSchools() {
       Vue.http.headers.common["userToken"] = getCookie("userToken");
-      this.$http.get(this.global.getSchools).then(res => {
+      let _url = this.global.getSchools+'?systembId='+ localStorage.getItem("systembIdWah");
+      this.$http.get(_url).then(res => {
         if (res.data.status === 200) {
           this.schoolList = res.data.resultObject.data;
+        }
+      });
+    },
+    getSchoolsOne() {
+      Vue.http.headers.common["userToken"] = getCookie("userToken");
+      let _url = this.global.getSchoolsDrowDown+'?systembId='+ localStorage.getItem("systembIdWah");
+      this.$http.get(_url).then(res => {
+        if (res.data.status === 200) {
+          this.schoolList1 = res.data.resultObject.data;
         }
       });
     },
@@ -497,7 +584,6 @@ export default {
       this.loadData();
     },
     statusChange() {
-      console.log(this.statusValue);
       this.loadData();
     },
     searchSubmit() {
@@ -505,9 +591,7 @@ export default {
     },
     // 城市选择
     provchange(key) {
-      console.log(key);
       this.provinceId = key;
-      console.log(this.city[key].name);
       this.cityarrs = this.city[key].child;
       //this.changeObj['provinceName']=this.city[key].name;
       this.arearrs = [];
@@ -516,18 +600,14 @@ export default {
       this.loadData();
     },
     citychange(key) {
-      console.log(key);
       this.cityId = key;
-      console.log(this.cityarrs[key].name);
       this.arearrs = this.cityarrs[key].child;
       //this.changeObj['cityName']=this.cityarrs[key].name;
       this.changeObj.areaId = "";
       this.loadData();
     },
     areachange(key) {
-      console.log(key);
       this.areaId = key;
-      console.log(this.arearrs[key]);
       this.changeObj["areaName"] = this.arearrs[key];
       this.changeObj = Object.assign({}, this.changeObj);
       this.loadData();
@@ -579,16 +659,18 @@ export default {
     creatEquip() {
       this.detaildialog = true;
       this.editEquip = false;
+      this.equipTitle = "新增设备";
       this.resect();
     },
     insertIbox() {
-      this.equipTitle = "新增设备";
+      // this.getSchoolsOne();
       let equipPattern = /^.{2,16}$/;
       let equipNumPattern = /^.{10,20}$/;
       let schoolNamePattern = /^.{2,16}$/;
       let versionTitlePatterm = /^.{1,16}$/;
       let userNamePattern = /^.{1,6}$/;
       let phonePatter = /^1[34578]\d{9}$/;
+      let cameraNumPatter = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{1,10}$/;
       if (equipPattern.test(this.detailData.equipName) == false) {
         this.detailData.equipNameTips = "！名称限2-16个字符。";
       } else {
@@ -598,6 +680,11 @@ export default {
         this.detailData.equipNumTips = "！编号格式错误";
       } else {
         this.detailData.equipNumTips = "";
+      }
+      if (cameraNumPatter.test(this.detailData.cameraNum) == false) {
+        this.detailData.cameraNumTips = "！请输入字母与数字组合不长于10位序列号";
+      } else {
+        this.detailData.cameraNumTips = "";
       }
       if (schoolNamePattern.test(this.detailData.schoolId) == false) {
         this.detailData.schoolIdTips = "！不能为空";
@@ -609,13 +696,22 @@ export default {
       } else {
         this.detailData.versionTitleTips = "";
       }
+      //  if(!this.platformoldId){
+      //    this.$message({
+      //     message: '请选择管理平台',
+      //     type: 'warning'
+      //   });
+      //   return
+      // }
       if (
         this.detailData.equipName &&
         this.detailData.versionTitle &&
         this.detailData.equipNum &&
+        this.detailData.cameraNum &&
         this.detailData.schoolId &&
         this.detailData.equipNameTips == "" &&
         this.detailData.equipNumTips == "" &&
+        this.detailData.cameraNumTips == "" &&
         this.detailData.schoolIdTips == "" &&
         this.detailData.versionTitleTips == ""
       ) {
@@ -634,11 +730,13 @@ export default {
               iboxId: this.iboxId,
               iboxName: this.detailData.equipName,
               iboxNum: this.detailData.equipNum,
+              cameraNum:this.detailData.cameraNum,
               iboxType: this.detailData.versionTitle,
               schoolId: this.detailData.schoolId,
               managerTel: this.detailData.phone,
               managerName: this.detailData.userName,
-              iboxRemark: this.detailData.schoolMark
+              iboxRemark: this.detailData.schoolMark,
+              systembId:localStorage.getItem("systembIdWah")
             },
             { emulateJSON: true }
           )
@@ -655,9 +753,7 @@ export default {
               console.log(err);
             }
           );
-      } else {
-        console.log("no");
-      }
+      } 
     },
     // 编辑
     detail(index, row) {
@@ -666,12 +762,13 @@ export default {
       this.equipTitle = "编辑设备";
       this.editEquip = true;
       this.iboxId = row.iboxId;
-      console.log(this.equipOperate);
+      this.platformoldId = localStorage.getItem("systembIdWah");
+      this.platformold=row.systembName;
       this.$http.get(this.global.getIbox + "?iboxId=" + row.iboxId).then(
         res => {
-          console.log(res.data.resultObject);
           this.detailData.equipName = res.data.resultObject.iboxName;
           this.detailData.equipNum = res.data.resultObject.iboxNum;
+          this.detailData.cameraNum = res.data.resultObject.cameraNum;
           if (res.data.resultObject.iboxType == 1) {
             this.detailData.versionTitle = "通用型";
           }
@@ -688,7 +785,6 @@ export default {
     },
     // 设备型号
     versionChange() {
-      console.log(this.detailData.versionTitle);
       let versionTitlePatterm = /^.{1,16}$/;
       if (versionTitlePatterm.test(this.detailData.versionTitle) == false) {
         this.detailData.versionTitleTips = "！不能为空";
@@ -740,8 +836,23 @@ export default {
   created() {
     this.loadData();
     this.getSchools();
+    this.getSchoolsOne();
     this.getSearchTexts();
     this.city = allCites;
+    // Vue.http.headers.common["userToken"] = getCookie("userToken");
+    // this.$http.get(this.global.getSystembs).then(res => {
+    //   if (res.body.status === 200) {
+    //     this.platformlistold = res.body.resultObject;
+    //     this.platformlist = [
+    //       { systembId: -1, systembName: "全部大B平台" },
+    //       ...res.body.resultObject
+    //     ];
+    //   } else if (res.body.status === 511) {
+    //     this.$router.push({ path: "/" });
+    //   } else {
+    //     alert(res.body.errorMessage);
+    //   }
+    // });
   }
 };
 </script>
@@ -832,15 +943,6 @@ export default {
       padding: 0 3px;
       font-weight: bolder;
     }
-    .green {
-      color: #30B44F;
-    }
-    .yellow {
-      color:#F2A218;
-    }
-    .red {
-      color: #DA373B;
-    }
     .el-button {
       float: right;
       margin: 10px 10px 0 0;
@@ -858,6 +960,8 @@ export default {
       text-align: left;
       color: #f56c6c;
       width: 100%;
+      height: 30px;
+      line-height: 30px;
     }
     .must {
       color: red;
@@ -904,5 +1008,17 @@ export default {
     margin: 10px 10px 0 0;
     cursor: pointer;
   }
+  #alertIbox .el-form-item{
+    margin-bottom: 18px;
+  }
+     .green {
+      color: #30B44F;
+    }
+    .yellow {
+      color:#F2A218;
+    }
+    .red {
+      color: #DA373B;
+    }
 }
 </style>

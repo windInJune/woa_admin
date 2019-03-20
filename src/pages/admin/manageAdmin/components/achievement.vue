@@ -20,12 +20,12 @@
         </el-select>
       </li>
       <li>
-        <el-select v-model="GradeValue" placeholder="全部年级" @change="GradeChange">
+        <el-select v-model="GradeValue" placeholder="全部项目部" @change="GradeChange">
           <el-option v-for="item in GradeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </li>
       <li>
-        <el-select v-model="classValue" placeholder="全部班级" @change="classChange">
+        <el-select v-model="classValue" placeholder="全部班组" @change="classChange">
           <el-option v-for="item in classList" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </li>
@@ -59,8 +59,8 @@
       </el-table-column>
       <el-table-column prop="userName" label="姓名" width="100"></el-table-column>
       <el-table-column prop="schoolName" label="所属机构"></el-table-column>
-      <el-table-column prop="gradeName" label="年级"></el-table-column>
-      <el-table-column prop="className" label="班级"></el-table-column>
+      <el-table-column prop="gradeName" label="项目部"></el-table-column>
+      <el-table-column prop="className" label="班组"></el-table-column>
       <el-table-column prop="courseName" label="课程名称"></el-table-column>
       <el-table-column prop="taskName" label="任务名称"></el-table-column>
       <el-table-column prop="trainingScore" label="操作分"></el-table-column>
@@ -76,7 +76,7 @@
       <el-table-column prop="iboxName" label="考试地点"></el-table-column>
       <el-table-column prop="finishTime" label="完成时间"></el-table-column>
 
-      <el-table-column prop="subjectType" label="操作" width="310">
+      <el-table-column prop="subjectType" label="操作" width="160">
         <template slot-scope="scope" class="handle">
           <el-button
             size="small"

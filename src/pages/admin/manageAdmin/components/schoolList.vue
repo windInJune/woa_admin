@@ -19,12 +19,12 @@
         </el-select>
       </li>
       <li>
-        <el-select v-model="GradeValue" placeholder="全部年级" @change="GradeChange">
+        <el-select v-model="GradeValue" placeholder="全部项目部" @change="GradeChange">
           <el-option v-for="item in GradeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </li>
       <li>
-        <el-select v-model="classValue" placeholder="全部班级" @change="classChange">
+        <el-select v-model="classValue" placeholder="全部班组" @change="classChange">
           <el-option v-for="item in classList" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </li>
@@ -48,7 +48,7 @@
       style="width: 100%;border:1px solid rgba(229, 229, 228, 1)"
       v-loading="loading"
     >
-    <el-table-column type="index" label="序号" width="80">
+    <el-table-column type="index" label="序号">
         <template slot-scope="scope">{{scope.$index + 1 + (currentPage-1)*10}}</template>
       </el-table-column>
       <el-table-column prop="userName" label="姓名" width="100"></el-table-column>
@@ -67,7 +67,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="userCard" label="身份证号" width="150"></el-table-column>
-      <el-table-column prop="schoolName" label="机构" width="160">
+      <el-table-column prop="schoolName" label="机构" width="120">
         <template slot-scope="scope">
           <p>{{ scope.row.schoolName }}</p>
           <!-- <el-popover trigger="hover" placement="top">
@@ -77,8 +77,8 @@
           </el-popover>-->
         </template>
       </el-table-column>
-      <el-table-column prop="gradeName" label="年级"></el-table-column>
-      <el-table-column prop="className" label="班级"></el-table-column>
+      <el-table-column prop="gradeName" label="项目部"></el-table-column>
+      <el-table-column prop="className" label="班组"></el-table-column>
       <el-table-column prop="userMajor" label="专业">
         <template slot-scope="scope">
           <span v-show="scope.row.userMajor == ''" class="yellow">--</span>
@@ -186,10 +186,10 @@
         <el-form-item label="身份证号" prop="userCard">
           <el-input type="text" disabled v-model="detailData.userCard"></el-input>
         </el-form-item>
-        <el-form-item label="年级" prop="gradeName">
+        <el-form-item label="项目部" prop="gradeName">
           <el-input type="text" disabled v-model="detailData.gradeName"></el-input>
         </el-form-item>
-        <el-form-item label="班级" prop="className">
+        <el-form-item label="班组" prop="className">
           <el-input type="text" disabled v-model="detailData.className"></el-input>
         </el-form-item>
         <el-form-item label="专业" prop="userMajor">

@@ -9,30 +9,31 @@
       <el-table-column type="index" label="序号" width="80">
         <template slot-scope="scope">{{scope.$index + 1 + (currentPage-1)*10}}</template>
       </el-table-column>
-      <el-table-column prop="schoolName" label="机构名称" width="165"></el-table-column>
+      <el-table-column prop="schoolName" label="机构名称" width="140"></el-table-column>
       <el-table-column prop="schoolId" label="机构ID"></el-table-column>
       <el-table-column prop="schoolType" label="类型">
         <template slot-scope="scope">
-          <span v-show="scope.row.schoolType == 1">公立</span>
-          <span v-show="scope.row.schoolType == 2">私立</span>
-          <span v-show="scope.row.schoolType == 3">公私合作</span>
-          <span v-show="scope.row.schoolType == 4">其它</span>
+          <span v-show="scope.row.schoolType == 1">房建</span>
+          <span v-show="scope.row.schoolType == 2">路桥</span>
+          <span v-show="scope.row.schoolType == 3">水力</span>
+          <span v-show="scope.row.schoolType == 4">电力</span>
+          <span v-show="scope.row.schoolType == 5">其他</span>
         </template>
       </el-table-column>
       <el-table-column prop="schoolSection" label="学段">
         <template slot-scope="scope">
-          <span v-show="scope.row.schoolSection == 1">小学</span>
-          <span v-show="scope.row.schoolSection == 2">初中</span>
-          <span v-show="scope.row.schoolSection == 3">高中</span>
-          <span v-show="scope.row.schoolSection == 4">完全中学</span>
-          <span v-show="scope.row.schoolSection == 5">九年一贯制</span>
-          <span v-show="scope.row.schoolSection == 6">十二年一贯制</span>
-          <span v-show="scope.row.schoolSection == 7">中专</span>
+          <span v-show="scope.row.schoolSection == 1">初级</span>
+          <span v-show="scope.row.schoolSection == 2">中级</span>
+          <span v-show="scope.row.schoolSection == 3">高级</span>
+          <span v-show="scope.row.schoolSection == 4">专业</span>
+          <span v-show="scope.row.schoolSection == 5">考证</span>
+          <span v-show="scope.row.schoolSection == 6">其他</span>
+          <!-- <span v-show="scope.row.schoolSection == 7">中专</span>
           <span v-show="scope.row.schoolSection == 8">高职</span>
           <span v-show="scope.row.schoolSection == 9">大专</span>
           <span v-show="scope.row.schoolSection == 10">大学</span>
           <span v-show="scope.row.schoolSection == 11">企业培训</span>
-          <span v-show="scope.row.schoolSection == 12">其它</span>
+          <span v-show="scope.row.schoolSection == 12">其它</span> -->
         </template>
       </el-table-column>
       <el-table-column prop="provinceName" label="省份"></el-table-column>
@@ -113,10 +114,11 @@
           <span class="must">*</span>
           <div class="identity">
             <el-radio-group v-model.trim="schoolType">
-              <el-radio :label="1">公立</el-radio>
-              <el-radio :label="2">私立</el-radio>
-              <el-radio :label="3">公私合作</el-radio>
-              <el-radio :label="4">其它</el-radio>
+              <el-radio :label="1">房建</el-radio>
+              <el-radio :label="2">路桥</el-radio>
+              <el-radio :label="3">水力</el-radio>
+              <el-radio :label="4">电力</el-radio>
+              <el-radio :label="5">其他</el-radio>
             </el-radio-group>
           </div>
         </el-form-item>
@@ -125,18 +127,18 @@
           <span class="must">*</span>
           <div class="identity level">
             <el-radio-group v-model.trim="schoolSection" style="display:flex;flex-wrap:wrap">
-              <el-radio :label="1">小学</el-radio>
-              <el-radio :label="2">初中</el-radio>
-              <el-radio :label="3">高中</el-radio>
-              <el-radio :label="4">完全中学</el-radio>
-              <el-radio :label="5">九年一贯制</el-radio>
-              <el-radio :label="6">十二年一贯制</el-radio>
-              <el-radio :label="7">中专</el-radio>
+              <el-radio :label="1">初级</el-radio>
+              <el-radio :label="2">中级</el-radio>
+              <el-radio :label="3">高级</el-radio>
+              <el-radio :label="4">专业</el-radio>
+              <el-radio :label="5">考证</el-radio>
+              <el-radio :label="6">其他</el-radio>
+              <!-- <el-radio :label="7">中专</el-radio>
               <el-radio :label="8">高职</el-radio>
               <el-radio :label="9">大专</el-radio>
               <el-radio :label="10">大学</el-radio>
               <el-radio :label="11">企业培训</el-radio>
-              <el-radio :label="12">其它</el-radio>
+              <el-radio :label="12">其它</el-radio> -->
             </el-radio-group>
           </div>
         </el-form-item>

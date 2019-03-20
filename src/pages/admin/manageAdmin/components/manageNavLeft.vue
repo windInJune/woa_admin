@@ -3,7 +3,7 @@
     <el-row class="tac">
       <el-col :span="24">
         <div class="head">
-          <img class="head-icon" :src="userImgs || userHeadSrc" alt>
+          <img class="head-icon" :src="userImgs == 'undefined' || !userImgs? userHeadSrc  : userImgs" alt>
           <h2>
             {{this.userName}}
             <i class="iconfont boy" v-show="this.sex == '男'">&#xe648;</i>
@@ -27,14 +27,21 @@
               <span slot="title">管理员管理</span>
             </el-menu-item>
           </router-link>
+          <router-link :to="{path: '/manageAdmin/iboxList' }">
+            <el-menu-item index="6" class="list">
+              <!-- <i class="el-icon-setting"></i> -->
+              <span slot="title">IBOX管理</span>
+            </el-menu-item>
+          </router-link>
           <router-link :to="{path: '/manageAdmin/entryrecord' }">
             <el-menu-item index="5" class="list">
               <span slot="title">进场记录</span>
             </el-menu-item>
           </router-link>
+
           <el-menu-item index="1" class="list scalDown" @click="showScroeFn">
             <!-- <i class="el-icon-setting"></i> -->
-            <div slot="title">成绩管理 <div :class="[$route.path.indexOf('achievement') == -1?'triangle_border_right':'triangle_border_down']"></div></div>
+            <div slot="title">成绩管理 <div :class="[$route.path.indexOf('achievement') == -1 && $route.path.indexOf('scoreAll') == -1 ?'triangle_border_right':'triangle_border_down']"></div></div>
           </el-menu-item>
           <div v-show="showScroe" class="scroeBox">
             <el-menu :default-active="routerPathTwo" class="el-menu-vertical-demo">
@@ -99,6 +106,12 @@ export default {
       if (this.$route.path === "/manageAdmin/entryrecord") {
         this.showScroe = false;
         return "5";
+      }
+      if (
+        this.$route.path === "/manageAdmin/iboxList" ||
+        this.$route.path === "/manageAdmin/iboxdetail"
+      ) {
+        return "6";
       }
     },
     routerPathTwo() {

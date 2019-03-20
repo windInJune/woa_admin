@@ -10,7 +10,7 @@
     <div class="admincent">
       <div class="searchbox clearb">
         <div class="stuimg">
-          <img :src="userObj.userPhoto">
+          <img :src="userObj.userPhoto == '' || userObj.userPhoto == 'undefind' ?staticHead:userObj.userPhoto " >
         </div>
         <ul class="stuimgUl">
           <li style="font-size:18px;font-weight:bold;">{{userObj.userName}}</li>
@@ -79,7 +79,7 @@ export default {
   data() {
     return {
       name: "考评成绩汇总",
-      // seachobj: {},
+      staticHead:require('../../../../assets/images/userhead.png'),
       pageObj: {
         pageNum: 1,
         pageSize: 10
@@ -91,8 +91,8 @@ export default {
       tabind: 0,
       tablemodule: [
         [
-          { prop: "gradeName", name: "年级" },
-          { prop: "className", name: "班级" },
+          { prop: "gradeName", name: "项目部" },
+          { prop: "className", name: "班组" },
           { prop: "courseName", name: "课程名称" },
           { prop: "taskName", name: "任务名称" },
           { prop: "trainingScore", name: "操作分" },
@@ -105,17 +105,8 @@ export default {
       ]
     };
   },
-  components: {
-    // Navrouter
-  },
-  // computed:{
-  // 	...mapGetters({
-  // 		getuser:'getuser'
-  // 	})
-  // },
   mounted() {
     let that = this;
-    // this.seachobj["schoolId"] = this.getuser.schoolId;
     this.tagind = this.$route.query.moduleType;
     if (this.tagind < 3) {
       this.tabind = 1;
@@ -153,7 +144,7 @@ export default {
         };
         let tag = Object.assign(obj, newobj, this.pageObj);
         getResultRecordListByUserId(tag).then(res => {
-          if (res.status == 200) {
+          if (res.data.status == 200) {
             this.tableData = res.data.resultObject.data || [];
             this.total = res.data.resultObject.totalCount;
           }
@@ -189,10 +180,8 @@ export default {
           moduleType: this.tagind
         };
         generateSheetForResultByUserId(obj).then(res => {
-          if (res.status == 200) {
-             if(res.status == 200){
-               window.open(res.data.resultObject);
-             }
+          if(res.data.status == 200){
+            window.open(res.data.resultObject);
           }
         });
       } else {
@@ -201,13 +190,9 @@ export default {
           userName: this.userObj.userName
         };
         generateSheetForScoreByUserId(obj).then(res => {
-          if (res.status == 200) {
-            window.open(res.data.resultObject);
-            this.$message({
-              type: "success",
-              message: "导出成功"
-            });
-          }
+           if(res.data.status == 200){
+              window.open(res.data.resultObject);
+            }
         });
       }
     }
@@ -236,6 +221,7 @@ export default {
     .searchbox {
       height: 170px;
       background: #f0f3f5;
+      position: relative;
       ul {
         float: left;
         width: 236px;
@@ -253,17 +239,21 @@ export default {
           content: "";
           position: absolute;
           top: 35px;
-          right: 0;
+          right: -20px;
           width: 1px;
           height: 100px;
           background: #ccc;
         }
       }
       h3 {
-        font-size: 30px;
-        float: left;
-        line-height: 50px;
-        margin: 60px 90px;
+        // font-size: 30px;
+        // float: left;
+        // line-height: 50px;
+        // margin: 60px 90px;
+        position:absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
         i {
           font-size: 30px;
           margin-right: 10px;

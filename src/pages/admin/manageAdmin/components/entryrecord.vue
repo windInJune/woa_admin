@@ -19,12 +19,12 @@
         </el-select>
       </li>
       <li>
-        <el-select v-model="GradeValue" placeholder="全部年级" @change="GradeChange">
+        <el-select v-model="GradeValue" placeholder="全部项目部" @change="GradeChange">
           <el-option v-for="item in GradeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </li>
       <li>
-        <el-select v-model="classValue" placeholder="全部班级" @change="classChange">
+        <el-select v-model="classValue" placeholder="全部班组" @change="classChange">
           <el-option v-for="item in classList" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </li>
@@ -50,10 +50,14 @@
       </el-table-column>
       <el-table-column prop="userName" label="姓名" width="120"></el-table-column>
       <el-table-column prop="schoolName" label="所属机构"></el-table-column>
-      <el-table-column prop="gradeName" label="年级"></el-table-column>
-      <el-table-column prop="className" label="班级"></el-table-column>
+      <el-table-column prop="gradeName" label="项目部"></el-table-column>
+      <el-table-column prop="className" label="班组"></el-table-column>
       <el-table-column prop="inOutTime" label="进出时间" width="260"></el-table-column>
-      <el-table-column prop="duration" label="活动时长"></el-table-column>
+      <el-table-column prop="entryTime" label="活动时长">
+            <template slot-scope="scope">
+              <span>{{scope.row.entryTime | timeSlate(scope.row.outTime)}}</span>
+            </template>
+      </el-table-column>
       <el-table-column prop="iboxName" label="IBOX" width="180"></el-table-column>
 
     </el-table>
@@ -91,6 +95,14 @@ export default {
       statusValue: "",
       statusDetail: ""
     };
+  },
+  filters:{
+    timeSlate(v,s){
+      let _s = (Number(Date.parse(new Date(s))) - Number(Date.parse(new Date(v))))/1000
+      let ss = Math.floor((_s / 60))
+      let mm = Math.floor((_s % 60))
+      return ss + '分' + mm + '秒'
+    }
   },
   methods: {
     headerClassFn(row, column, rowIndex, columnIndex) {
@@ -134,12 +146,12 @@ export default {
     outer(){
        generateSheetForEntryrecordList({
           systembId:localStorage.getItem("systembIdWah"),
-          classId: this.classValue, //班级编号
+          classId: this.classValue == '-1'? "" : this.GradeValue, //班级编号
           searchName: this.serarchValue, //学员姓名
           pageNum: this.currentPage,
           pageSize: this.pageSize,
-          schoolId:this.schoolValue,
-          gradeId:this.GradeValue
+          schoolId:this.schoolValue == '-1'? "" : this.GradeValue,
+          gradeId:this.GradeValue == '-1'? "" : this.GradeValue
         }).then(res => {
            if(res.status == 200){
             window.open(res.data.resultObject);
