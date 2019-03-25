@@ -23,7 +23,7 @@
 		    <el-table-column
 		      show-overflow-tooltip
 		      prop="gradeName"
-		      label="年级">
+		      label="项目部">
 		        <!-- <template slot-scope="scope">
 			        <span>{{scope.row.userZhinum || '--'}}</span>
 			    </template> -->
@@ -31,7 +31,7 @@
 		    <el-table-column
 		      show-overflow-tooltip
 		      prop="className"
-		      label="班级">
+		      label="班组">
 		        <!-- <template slot-scope="scope">
 			        <span>{{scope.row.userSex || '--'}}</span>
 			    </template> -->

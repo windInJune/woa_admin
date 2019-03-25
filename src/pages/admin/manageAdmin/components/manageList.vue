@@ -447,7 +447,7 @@ export default {
       } else {
         this.schoolMarkTips = "";
       }
-      if (!this.province && !this.city && !this.area) {
+      if (!this.province || !this.city || !this.area) {
         this.areaTips = "请选择地区";
       } else {
         this.areaTips = "";
@@ -628,25 +628,25 @@ export default {
     //地区选择
     provincesChoose() {
       /* 省的编号 + 省的名字 */
-      console.log(this.province);
       this.myProvince = this.allCity[this.province].name;
-      console.log(this.myProvince);
       /* 该省的下级 */
       this.cities = this.allCity[this.province];
+      this.city = "";
+      this.myCity = "";
+      this.area = "";
+      this.myArea = "";
     },
     citiesChoose() {
       /* 城市的编号 + 城市的名字 */
-      console.log(this.city);
       this.myCity = this.cities.child[this.city].name;
-      console.log(this.myCity);
       /* 该城市的下级 */
       this.areas = this.cities.child[this.city];
+      this.area = "";
+      this.myArea = "";
     },
     areasChoose() {
       /* 区的编号 + 区的名字 */
-      console.log(this.area);
       this.myArea = this.areas.child[this.area];
-      console.log(this.myArea);
     },
     resets() {
       (this.editSchool = false),
@@ -759,16 +759,17 @@ export default {
       padding: 0 10px;
     }
     li {
-      flex-basis: 50%;
+      width: 50%;
       text-align: left;
       height: 50px;
-      line-height: 50px;
       font-size: 16px;
-      text-indent: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       span {
         color: #409eff;
         font-weight: bolder;
-        margin-left: 20px;
+        margin-right: 20px;
       }
     }
   }

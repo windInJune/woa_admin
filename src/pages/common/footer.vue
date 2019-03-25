@@ -1,5 +1,5 @@
 <template>
-  <el-footer>©2018-2019 杭州知筑信息技术有限公司 All Rights Reserved.浙ICP备140559689-1</el-footer>
+  <el-footer>湘ICP备17003625号-1 湖南沃阿汇网络科技有限公司 版权所有  杭州知筑信息技术有限公司 技术支持</el-footer>
 </template>
 <style scoped>
 .el-footer {

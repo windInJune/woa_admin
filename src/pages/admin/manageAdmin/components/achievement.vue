@@ -296,10 +296,8 @@ export default {
         .get(this.global.getClass + "?userGradeid=" + this.GradeValue)
         .then(res => {
           if (res.data.status === 200) {
-            console.log(res);
             this.classValue = "";
             this.classList = res.data.resultObject.data;
-            console.log(this.classList);
           }
         });
       this.loadData();
@@ -322,7 +320,7 @@ export default {
     },
     outer(){
       generateSheetForScoreListCJ(localStorage.getItem("systembIdWah")).then(res => {
-         if(res.status == 200){
+         if(res.data.status == 200){
            window.open(res.data.resultObject);
         }
       })

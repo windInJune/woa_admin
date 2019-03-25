@@ -88,7 +88,7 @@ export default {
                 res.data.resultObject.userLoginname
               );
               localStorage.setItem("userIdWah", res.data.resultObject.userId);
-              localStorage.setItem("systembIdWah", res.data.resultObject.systembId);
+              localStorage.setItem("systembIdWah", Number(res.data.resultObject.systembId));
               localStorage.setItem("sexWah", this.sex);
               localStorage.setItem("userTypeWah", res.data.resultObject.userType);
               if (res.data.resultObject.userType == "2") {
@@ -242,7 +242,7 @@ export default {
       height: 60px;
       text-align: left;
       box-shadow: 0 0 8px #b4b4b4;
-      background-color: #66b1ff;
+      background-color: #ea521a;
       img {
         margin-right: 15px;
       }

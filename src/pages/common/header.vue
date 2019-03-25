@@ -67,7 +67,7 @@ export default {
   height: 60px;
   box-shadow: @box-shadow;
   padding: 0 50px;
-  background-color: @main-color;
+  background-color: #ea521a;
   ul {
     clear: both;
     height: 60px;
