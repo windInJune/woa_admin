@@ -63,7 +63,7 @@
         </el-select>
       </li>
       <li>
-        <el-select v-model="statusValue" placeholder="全部状态" @change="statusChange">
+        <el-select  placeholder="全部状态" @change="statusChange">
           <el-option v-for="item in statusList" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </li>
@@ -696,13 +696,6 @@ export default {
       } else {
         this.detailData.versionTitleTips = "";
       }
-      //  if(!this.platformoldId){
-      //    this.$message({
-      //     message: '请选择管理平台',
-      //     type: 'warning'
-      //   });
-      //   return
-      // }
       if (
         this.detailData.equipName &&
         this.detailData.versionTitle &&

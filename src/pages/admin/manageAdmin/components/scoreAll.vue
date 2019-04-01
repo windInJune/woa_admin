@@ -180,6 +180,7 @@ export default {
           moduleType: this.tagind
         };
         generateSheetForResultByUserId(obj).then(res => {
+          console.log(res)
           if(res.data.status == 200){
             window.open(res.data.resultObject);
           }
@@ -190,6 +191,8 @@ export default {
           userName: this.userObj.userName
         };
         generateSheetForScoreByUserId(obj).then(res => {
+          console.log(res)
+
            if(res.data.status == 200){
               window.open(res.data.resultObject);
             }

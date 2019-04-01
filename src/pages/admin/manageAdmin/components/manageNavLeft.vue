@@ -111,6 +111,7 @@ export default {
         this.$route.path === "/manageAdmin/iboxList" ||
         this.$route.path === "/manageAdmin/iboxdetail"
       ) {
+        this.showScroe = false;
         return "6";
       }
     },
