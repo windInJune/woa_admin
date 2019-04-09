@@ -32,6 +32,7 @@
 <script>
 /*eslint-disable */
 import Vue from "vue";
+import { Base64 } from 'js-base64';
 import { setCookie, getCookie } from "../../assets/js/cookie.js";
 import Footer from "../common/footer.vue";
 import { mapState, mapMutations } from "vuex";
@@ -57,7 +58,7 @@ export default {
       this.$http
         .post(
           this.global.userlogin,
-          { userLoginname: this.user, userPwd: this.password },
+          { userLoginname: this.user, userPwd: Base64.encode(this.password) },
           { emulateJSON: true }
         )
         .then(
