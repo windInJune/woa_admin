@@ -2,9 +2,10 @@
 let localAPI;
 // 登录
 if (process.env.NODE_ENV == 'development') {
-    localAPI = 'http://172.16.1.165/ibox';
+    localAPI = 'http://www.zz-w.cn/ibox';
+    // localAPI = 'http://172.16.1.165/ibox';
 } else {
-    localAPI = 'http://172.16.1.165/ibox';
+    localAPI = 'http://www.zz-w.cn/ibox';
     // localAPI = 'http://172.16.1.165/ibox'; //线上url
 }
 // 登录

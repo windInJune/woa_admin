@@ -11,9 +11,10 @@ import {
 } from "../assets/js/cookie.js";
 let baseUrl
 if (process.env.NODE_ENV == 'development') {
-    baseUrl = 'http://172.16.1.165/ibox/';
+    baseUrl = 'http://www.zz-w.cn/ibox/';
+    // baseUrl = 'http://172.16.1.165/ibox/';
 } else {
-    baseUrl = 'http://172.16.1.165/ibox/';
+    baseUrl = 'http://www.zz-w.cn/ibox/';
     // baseUrl = 'http://172.16.1.165/ibox/'; //线上url
 }
 const axiosfn = (url = '', data = {}, type = 'GET') => {

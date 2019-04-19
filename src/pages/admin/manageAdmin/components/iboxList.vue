@@ -77,7 +77,7 @@
           <el-option v-for="(item,index) in options" :key="index" :label="item" :value="item"></el-option>
         </el-select>
       </li>
-        <div class="searchs_btn" @click="searchSubmit">查找</div>
+        <li class="searchs_btn" @click="searchSubmit">查找</li>
         <!-- <el-button type="primary" plain class="search-button" @click="searchSubmit">查找</el-button> -->
     </ul>
     <div class="statistics">当前条件下共有IBOX
@@ -90,7 +90,7 @@
       <!-- <el-button type="success"  @click="creatEquip"></el-button> -->
     </div>
     <!-- 表单 -->
-    <el-table :data="pageData" highlight-current-row :header-cell-style="headerClassFn"  style="width: 100%;border:1px solid rgba(229, 229, 228, 1)" v-loading="loading">
+    <el-table :data="pageData" highlight-current-row :header-cell-style="headerClassFn"  style="width: 100%;border:1px solid rgba(229, 229, 228, 1)">
       <el-table-column type="index" label="序号">
         <template slot-scope="scope">{{scope.$index + 1 + (currentPage-1)*10}}</template>
       </el-table-column>
@@ -874,14 +874,21 @@ export default {
     justify-content: space-between;
     li {
       margin-left: 10px;
-      flex: 1;
       position: relative;
     }
     li:first-child {
       margin-left: 0px;
     }
-    li:last-child {
-      text-align: right;
+      .searchs_btn {
+      width: 120px ;
+      font-size: 16px;
+      color: #fff;
+      height: 36px;
+      line-height: 36px;
+      text-align: center;
+      background: rgba(0, 144, 255, 1);
+      border-radius: 2px;
+      cursor: pointer;
     }
     .serarchValue {
       width: 250px;

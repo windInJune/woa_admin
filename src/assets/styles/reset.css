@@ -261,7 +261,7 @@ a {
   margin-left: 6px;
   margin-top: -12px;
   display: inline-block;
-  border-width:8px  8px 0;
+  border-width:6px  6px 0;
   transform: rotate(-45deg);
   border-style:solid;
   border-color:transparent transparent transparent #fff;/*透明 透明 透明 灰*/
@@ -283,7 +283,7 @@ a {
   width:0;
   height:0;
   display: inline-block;
-  border-width:6px 0 6px 6px;
+  border-width:4px 0 4px 4px;
   border-style:solid;
   border-color:transparent transparent transparent #000;/*透明 透明 透明 灰*/
   position:relative;
