@@ -451,7 +451,7 @@ export default {
       });
     },
     schoolChange() {
-      console.log(this.schoolValue);
+      this.currentPage = 1;            
       Vue.http.headers.common["userToken"] = getCookie("userToken");
       this.$http
         .get(this.global.getGrades + "?schoolId=" + this.schoolValue)
@@ -465,10 +465,11 @@ export default {
       this.loadData();
     },
     statusChange() {
-      console.log(this.statusValue);
+      this.currentPage = 1;                  
       this.loadData();
     },
     searchSubmit() {
+      this.currentPage = 1;            
       this.loadData();
     }
   },

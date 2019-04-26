@@ -573,24 +573,30 @@ export default {
       });
     },
     schoolChange() {
+      this.currentPage = 1;            
       this.loadData();
     },
     // 搜索keyword
     searchChange() {
+      this.currentPage = 1;            
       this.keyShow = true;
     },
     // 条件筛选
     classChange() {
+      this.currentPage = 1;            
       this.loadData();
     },
     statusChange() {
+      this.currentPage = 1;            
       this.loadData();
     },
     searchSubmit() {
+      this.currentPage = 1;            
       this.loadData();
     },
     // 城市选择
     provchange(key) {
+      this.currentPage = 1;            
       this.provinceId = key;
       this.cityarrs = this.city[key].child;
       //this.changeObj['provinceName']=this.city[key].name;
@@ -600,6 +606,7 @@ export default {
       this.loadData();
     },
     citychange(key) {
+      this.currentPage = 1;            
       this.cityId = key;
       this.arearrs = this.cityarrs[key].child;
       //this.changeObj['cityName']=this.cityarrs[key].name;
@@ -607,6 +614,7 @@ export default {
       this.loadData();
     },
     areachange(key) {
+      this.currentPage = 1;            
       this.areaId = key;
       this.changeObj["areaName"] = this.arearrs[key];
       this.changeObj = Object.assign({}, this.changeObj);
